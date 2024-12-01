@@ -10,6 +10,6 @@ perturbation_max_num_tokens: 2048
 # Specify this in command line by: 
 # Single type defense: python xxx.py defense.smoothllm_perturbations=[Summarize] 
 # Multiple type defense: python xxx.py defense.smoothllm_perturbations=[Summarize, Paraphrase] 
-smoothllm_perturbations: ???
+smoothllm_perturbations: ['Summarize', 'Paraphrase', 'Translate', 'SpellCheck']
 # Specify the path to the selector
 policy_path: null
