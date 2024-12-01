@@ -25,14 +25,6 @@ def get_model_path_and_template(model_name):
             "path":"gpt-3.5-turbo-1106",
             "template":"gpt-3.5-turbo"
         },
-        "vicuna":{
-            "path": remap_conf(OmegaConf.load("config/llm/vicuna.yaml"))['model_path'],
-            "template":"vicuna_v1.5"
-        },
-        "llama-2":{
-            "path": remap_conf(OmegaConf.load("config/llm/llama-2.yaml"))['model_path'],
-            "template":"llama-2"
-        },
     }
     path, template = full_model_dict[model_name]["path"], full_model_dict[model_name]["template"]
     return path, template
@@ -51,6 +43,7 @@ def load_indiv_model(model_name, device=None, hparams=None):
 
     return lm, template
 
+DEFAULT_STOPS = ["\n", "\n\n", "END", "###", "}"]
 class PAIRAttackLLM:
     """
         Base class for attacker language models.
@@ -183,8 +176,8 @@ class PAIRAttackLLM:
 
             # Generate outputs 
             # outputs_list = self.model.batched_generate(full_prompts_subset,
-            outputs_list = self.model(full_prompts_subset,
-                    max_num_tokens = self.max_n_tokens,  
+            outputs_list = self.model.batched_generate(full_prompts_subset,
+                    max_n_tokens = self.max_n_tokens,  
                     temperature = self.temperature,
                     top_p = self.top_p
             )
@@ -197,7 +190,8 @@ class PAIRAttackLLM:
                     if not full_output.strip().startswith("{\"improvement\": \""): 
                         full_output = init_message + full_output
 
-                attack_dict, json_str = common.extract_json(full_output, self.model.stops)
+                
+                attack_dict, json_str = common.extract_json(full_output, DEFAULT_STOPS)
                 
                 if attack_dict is not None:
                     valid_outputs[orig_index] = attack_dict
