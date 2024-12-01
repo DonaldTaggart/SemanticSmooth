@@ -2,6 +2,7 @@ import json
 import torch
 
 from fastchat.model import get_conversation_template
+from fastchat.conversation import SeparatorStyle
 
 class Prompt:
 
@@ -55,6 +56,8 @@ class Prompt:
     
     def new_full_prompt(self, conv_template):
         conv = self.construct_conv(conv_template)
+        conv.sep = '\n'
+        conv.sep_style = SeparatorStyle.ADD_COLON_SINGLE
         full_prompt = conv.get_prompt()
         return full_prompt
     
