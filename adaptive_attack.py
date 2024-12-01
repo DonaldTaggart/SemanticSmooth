@@ -61,7 +61,7 @@ def main(hparams: ExperimentConfig):
     elif hparams.attacker._target_ == 'PAIR':
         os.environ['BASEDIR'] = hparams['BASEDIR']
         attacker = PAIRAttackLLM(
-            'vicuna',
+            'gpt-3.5-turbo',
             hparams.attacker.attack_max_n_tokens,
             max_n_attack_attempts=hparams.attacker.attack_max_n_attack_attempts, 
             temperature=1, # default attack hyper-param
@@ -107,7 +107,7 @@ def main(hparams: ExperimentConfig):
                     prompt_copy = copy.deepcopy(prompt)
                     prompt_copy.perturbable_prompt = attack_string
                     prompt_copy.goal = prompt.goal
-                    prompt_copy.full_prompt = prompt_copy.new_full_prompt(conv_template=hparams.target_model)
+                    prompt_copy.full_prompt = prompt_copy.new_full_prompt(conv_template=hparams.llm._target_)
 
                     # Target model generate response
                     defense_response = defense(prompt_copy)
