@@ -2,7 +2,7 @@
 
 This is not the official implementation for the paper [Defending Large Language Models against Jailbreak Attacks via Semantic Smoothing](https://arxiv.org/abs/2402.16192). 
 
-GOAL: 
+GOAL **Run Semantic Smooth Succesfully with a GPT-default PAIR**: 
 ```bash
 python adaptive_attack.py llm=gpt-3.5-turbo-1106.yaml attacker=PAIR defense=semanticsmooth.yaml task=advbench
 ```
